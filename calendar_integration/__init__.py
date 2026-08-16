@@ -1,0 +1,1 @@
+"""Calendar integration app package."""

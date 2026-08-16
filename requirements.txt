@@ -1,0 +1,15 @@
+# Core
+Django>=5.1,<5.2
+djangorestframework>=3.15,<4.0
+
+# JWT Authentication
+djangorestframework-simplejwt>=5.3,<6.0
+
+# MySQL Database Driver
+mysqlclient>=2.2,<3.0
+
+# Environment Variable Management
+python-decouple>=3.8,<4.0
+
+# CORS Headers (needed for future frontend integration)
+django-cors-headers>=4.3,<5.0
