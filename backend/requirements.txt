@@ -1,0 +1,28 @@
+# Core
+Django>=5.1,<5.2
+djangorestframework>=3.15,<4.0
+
+# JWT Authentication
+djangorestframework-simplejwt>=5.3,<6.0
+
+# Database Drivers & Configuration (MySQL)
+mysqlclient>=2.2,<3.0; sys_platform != "win32"
+PyMySQL>=1.1.0
+cryptography>=42.0.0
+dj-database-url>=2.1.0
+
+# Environment Variable Management
+python-decouple>=3.8,<4.0
+
+# Production WSGI Server & Static Files
+gunicorn>=22.0.0
+whitenoise>=6.6.0
+
+# CORS Headers
+django-cors-headers>=4.3,<5.0
+
+# HTTP client for Google Calendar / OAuth integration
+requests>=2.31,<3.0
+
+# OpenAPI / Swagger schema generation
+drf-spectacular>=0.27,<1.0

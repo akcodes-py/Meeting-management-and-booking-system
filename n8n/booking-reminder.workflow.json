@@ -1,0 +1,117 @@
+{
+  "name": "Booking Reminder (Poll backend)",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 15
+            }
+          ]
+        }
+      },
+      "id": "trigger-schedule",
+      "name": "Every 15 minutes",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [0, 0]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.N8N_API_BASE_URL }}/api/v1/auth/login/",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"email\": \"{{ $env.N8N_HOST_EMAIL }}\",\n  \"password\": \"{{ $env.N8N_HOST_PASSWORD }}\"\n}",
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "login",
+      "name": "Login (get JWT)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [260, 0]
+    },
+    {
+      "parameters": {
+        "url": "={{ $env.N8N_API_BASE_URL }}/api/v1/bookings/reminders-due/",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpHeaderAuth",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $json.access }}"
+            }
+          ]
+        },
+        "options": {
+          "timeout": 20000
+        }
+      },
+      "id": "claim-reminders",
+      "name": "Claim due reminders",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [520, 0]
+    },
+    {
+      "parameters": {
+        "mode": "list",
+        "fieldName": "bookings"
+      },
+      "id": "split",
+      "name": "Split into bookings",
+      "type": "n8n-nodes-base.splitInBatches",
+      "typeVersion": 3,
+      "position": [780, 0]
+    },
+    {
+      "parameters": {
+        "fromEmail": "={{ $env.N8N_FROM_EMAIL }}",
+        "toEmail": "={{ $json.invitee_email }}",
+        "subject": "=Reminder: {{ $json.event_type }}",
+        "emailFormat": "text",
+        "text": "=Hi {{ $json.invitee_name }},\n\nThis is a reminder that your meeting is coming up.\n\nDate/time: {{ $json.start_time }} - {{ $json.end_time }}\nMeet link: {{ $json.meet_link || 'See your calendar invite' }}\n\nSee you there!"
+      },
+      "id": "email",
+      "name": "Send reminder email",
+      "type": "n8n-nodes-base.sendEmail",
+      "typeVersion": 1,
+      "position": [1040, 0]
+    },
+    {
+      "parameters": {
+        "continueOnFail": true
+      },
+      "id": "fail-sink",
+      "name": "Error branch (log)",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [1040, 220]
+    }
+  ],
+  "connections": {
+    "Every 15 minutes": {
+      "main": [[{ "node": "Login (get JWT)", "type": "main", "index": 0 }]]
+    },
+    "Login (get JWT)": {
+      "main": [[{ "node": "Claim due reminders", "type": "main", "index": 0 }]]
+    },
+    "Claim due reminders": {
+      "main": [[{ "node": "Split into bookings", "type": "main", "index": 0 }]]
+    },
+    "Split into bookings": {
+      "main": [[{ "node": "Send reminder email", "type": "main", "index": 0 }]]
+    },
+    "Send reminder email": {
+      "main": [[{ "node": "Split into bookings", "type": "main", "index": 1 }]]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  }
+}

@@ -1,5 +1,5 @@
 # =============================================================================
-# Python
+# Python & Bytecode
 # =============================================================================
 __pycache__/
 *.py[cod]
@@ -8,21 +8,33 @@ __pycache__/
 *.pyd
 
 # =============================================================================
-# Virtual Environment
+# Virtual Environments
 # =============================================================================
 venv/
-env/
 .venv/
-.env/
+env/
 ENV/
+.env/
 
 # =============================================================================
-# Environment Variables — NEVER commit this!
+# Environment & Secrets (Never commit .env files)
 # =============================================================================
 .env
+.env.*
+.env.local
+.env.*.local
+backend/.env
+backend/.env.*
+frontend/.env
+frontend/.env.*
+frontend/.env.local
+frontend/.env.*.local
+!.env.example
+!backend/.env.example
+!frontend/.env.example
 
 # =============================================================================
-# Django
+# Django & Static Files
 # =============================================================================
 *.log
 local_settings.py
@@ -30,17 +42,23 @@ db.sqlite3
 db.sqlite3-journal
 media/
 staticfiles/
+backend/staticfiles/
 
 # =============================================================================
-# Distribution / Packaging
+# Frontend (Node, Vite, Builds)
 # =============================================================================
+node_modules/
+frontend/node_modules/
 dist/
+frontend/dist/
 build/
-*.egg-info/
-.eggs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
 
 # =============================================================================
-# IDE / Editor
+# IDE & System Files
 # =============================================================================
 .vscode/
 .idea/
@@ -50,15 +68,9 @@ build/
 Thumbs.db
 
 # =============================================================================
-# Testing
+# Testing & Coverage
 # =============================================================================
 .coverage
 .tox/
 htmlcov/
 .pytest_cache/
-
-# =============================================================================
-# Misc
-# =============================================================================
-*.bak
-*.tmp
