@@ -279,7 +279,8 @@ In development, set `EMAIL_BACKEND=django.core.mail.backends.console.EmailBacken
 3. In **Settings > General**:
    - **Root Directory**: `backend`
 4. Railway automatically detects `railway.toml` / `railway.json` / `Procfile`:
-   - **Start Command**: `python manage.py migrate && python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT`
+   - **Start Command**: `gunicorn config.wsgi:application --bind 0.0.0.0:$PORT`
+   - **Pre-Deploy Command**: `python manage.py collectstatic --noinput && python manage.py migrate`
    - **Healthcheck Path**: `/api/health/`
 5. In **Variables**, add all backend environment variables listed in the [Environment Variables](#-environment-variables) section.
 6. In **Settings > Networking**, generate a public domain (e.g. `your-backend.railway.app`).

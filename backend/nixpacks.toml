@@ -5,4 +5,4 @@ nixPkgs = ["python312"]
 cmds = ["python -m venv --copies /opt/venv && . /opt/venv/bin/activate && pip install -r requirements.txt"]
 
 [start]
-cmd = "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:$PORT"
+cmd = "gunicorn config.wsgi:application --bind 0.0.0.0:$PORT"
